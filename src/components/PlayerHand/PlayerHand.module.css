@@ -1,0 +1,30 @@
+.container {
+  padding: 6px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.label {
+  font-size: 0.6rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.35);
+  letter-spacing: 0.05em;
+  padding-left: 4px;
+}
+
+.hand {
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  padding: 4px 0 8px;
+}
+
+.hand::-webkit-scrollbar { display: none; }
+
+@media (min-width: 480px) {
+  .container { padding: 8px 12px; }
+  .hand { gap: 5px; }
+}

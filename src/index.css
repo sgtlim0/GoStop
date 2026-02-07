@@ -1,0 +1,82 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg-primary: #1a0a0a;
+  --bg-secondary: #241414;
+  --bg-felt: #1a3020;
+  --text-primary: #e8e6e3;
+  --gold: #f0c040;
+  --gold-dark: #c09830;
+  --red: #c23b22;
+  --red-dark: #8b1a1a;
+
+  --card-w: 38px;
+  --card-h: 54px;
+  --card-w-sm: 28px;
+  --card-h-sm: 40px;
+
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', Roboto, Oxygen, Ubuntu, sans-serif;
+
+  color-scheme: dark;
+}
+
+@media (min-width: 400px) {
+  :root {
+    --card-w: 44px;
+    --card-h: 62px;
+    --card-w-sm: 32px;
+    --card-h-sm: 46px;
+  }
+}
+
+@media (min-width: 480px) {
+  :root {
+    --card-w: 50px;
+    --card-h: 72px;
+    --card-w-sm: 36px;
+    --card-h-sm: 52px;
+  }
+}
+
+@media (min-width: 768px) {
+  :root {
+    --card-w: 56px;
+    --card-h: 80px;
+    --card-w-sm: 40px;
+    --card-h-sm: 58px;
+  }
+}
+
+html {
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  height: 100%;
+  font-family: var(--font-sans);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+#root {
+  height: 100%;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}

@@ -1,0 +1,157 @@
+.app {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-primary);
+  overflow: hidden;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 12px;
+  flex-shrink: 0;
+  position: relative;
+  background: linear-gradient(180deg, rgba(26, 10, 10, 0.9), transparent);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.logoIcon {
+  font-size: 0.9rem;
+}
+
+.logoText {
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.soundToggle {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.15s ease;
+  padding: 0;
+  line-height: 1;
+}
+
+.soundToggle:active {
+  transform: translateY(-50%) scale(0.93);
+}
+
+.gameArea {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-height: 0;
+  background: linear-gradient(180deg, #1a2e1a 0%, #0f200f 50%, #1a0a0a 100%);
+}
+
+.capturedRow {
+  display: flex;
+  gap: 0;
+}
+
+.capturedHalf {
+  flex: 1;
+  min-width: 0;
+}
+
+.controlBar {
+  flex-shrink: 0;
+  padding: 6px 12px 12px;
+  display: flex;
+  justify-content: center;
+}
+
+.actionButton {
+  padding: 10px 32px;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.1s ease;
+  letter-spacing: 0.05em;
+}
+
+.actionButton:active {
+  transform: scale(0.96);
+}
+
+.primaryBtn {
+  background: linear-gradient(145deg, #f0c040, #c09830);
+  color: #1a1a2e;
+  box-shadow: 0 4px 16px rgba(240, 192, 64, 0.3);
+}
+
+.secondaryBtn {
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.startScreen {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+}
+
+.startTitle {
+  font-size: 2rem;
+  font-weight: 900;
+  color: var(--gold);
+  text-shadow: 0 2px 20px rgba(240, 192, 64, 0.3);
+}
+
+.startSubtitle {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.startBtn {
+  padding: 14px 48px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(145deg, #c23b22, #8b1a1a);
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(194, 59, 34, 0.4);
+  transition: transform 0.1s ease;
+}
+
+.startBtn:active {
+  transform: scale(0.96);
+}
+
+@media (min-width: 480px) {
+  .header { padding: 10px 16px; }
+  .logoText { font-size: 0.9rem; }
+  .controlBar { padding: 8px 16px 16px; }
+}

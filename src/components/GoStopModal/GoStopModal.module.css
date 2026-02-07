@@ -1,0 +1,135 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  animation: overlayIn 0.3s ease;
+  backdrop-filter: blur(4px);
+}
+
+@keyframes overlayIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+.modal {
+  background: linear-gradient(145deg, #1c1c2e, #15152a);
+  border: 1px solid rgba(240, 192, 64, 0.2);
+  border-radius: 16px;
+  padding: 24px;
+  min-width: 280px;
+  max-width: 90vw;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  animation: popIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
+}
+
+@keyframes popIn {
+  0% { opacity: 0; transform: scale(0.8); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+.title {
+  font-size: 1.3rem;
+  font-weight: 900;
+  color: #f0c040;
+  text-align: center;
+}
+
+.subtitle {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.6);
+  text-align: center;
+}
+
+.details {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+}
+
+.detailRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.goButton, .stopButton {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform 0.1s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.goButton:active, .stopButton:active {
+  transform: scale(0.96);
+}
+
+.goButton {
+  background: linear-gradient(145deg, #c23b22, #8b1a1a);
+  color: white;
+  box-shadow: 0 4px 12px rgba(194, 59, 34, 0.3);
+}
+
+.stopButton {
+  background: linear-gradient(145deg, #f0c040, #c09830);
+  color: #1a1a2e;
+  box-shadow: 0 4px 12px rgba(240, 192, 64, 0.3);
+}
+
+.resultRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.resultItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.resultLabel {
+  font-size: 0.65rem;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.resultValue {
+  font-size: 1.4rem;
+  font-weight: 900;
+  color: #f0c040;
+}
+
+.vs {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.3);
+  font-weight: 600;
+}
+
+.message {
+  text-align: center;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.5);
+}
