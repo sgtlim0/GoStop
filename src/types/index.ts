@@ -1,5 +1,14 @@
 export type CardType = 'bright' | 'animal' | 'ribbon' | 'junk'
 export type RibbonType = 'hongdan' | 'chodan' | 'cheongdan' | 'bi'
+export type AIDifficulty = 'easy' | 'normal' | 'hard' | 'insane' | 'impossible'
+
+export const DIFFICULTY_LABELS: Record<AIDifficulty, string> = {
+  easy: '\uCD08\uBCF4',
+  normal: '\uBCF4\uD1B5',
+  hard: '\uC5B4\uB824\uC6C0',
+  insane: '\uACE0\uC218',
+  impossible: '\uC2E0',
+}
 
 export interface HwatuCard {
   readonly id: number

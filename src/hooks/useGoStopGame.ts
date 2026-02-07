@@ -1,5 +1,5 @@
 import { useState, useCallback, useRef } from 'react'
-import type { HwatuCard, GameState, GamePhase, CapturedCards } from '../types/index.ts'
+import type { HwatuCard, GameState, GamePhase, CapturedCards, AIDifficulty } from '../types/index.ts'
 import { emptyCaptured, emptyScore } from '../types/index.ts'
 import { createDeck, shuffleDeck, dealInitial, getFieldMatches, sortHand } from '../engine/cards.ts'
 import { calculateScore, addToCapture } from '../engine/scoring.ts'
@@ -32,10 +32,17 @@ function initialState(): GameState {
 
 export function useGoStopGame() {
   const [state, setState] = useState<GameState>(initialState)
+  const [difficulty, setDifficulty] = useState<AIDifficulty>('normal')
+  const [inputLocked, setInputLocked] = useState(false)
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const clearTimer = () => {
     if (timerRef.current) { clearTimeout(timerRef.current); timerRef.current = null }
+  }
+
+  const lockInput = (ms: number) => {
+    setInputLocked(true)
+    setTimeout(() => setInputLocked(false), ms)
   }
 
   // ── Helpers ──
@@ -67,9 +74,7 @@ export function useGoStopGame() {
       if (flipMatched) {
         toCapture.push(flipped, flipMatched)
         newField = newField.filter(c => c.id !== flipMatched.id)
-        // If flipped matched the card we just placed (쪽)
         if (!matched && flipMatched.id === played.id) {
-          // played card is already in newField, remove it
           newField = newField.filter(c => c.id !== played.id)
         }
       } else {
@@ -113,12 +118,14 @@ export function useGoStopGame() {
       round: prev.round + 1,
       totalScore: prev.totalScore,
     }))
+    lockInput(900)
     timerRef.current = setTimeout(() => {
       setState(prev => ({ ...prev, phase: 'playerPickCard', message: '\uCE74\uB4DC\uB97C \uC120\uD0DD\uD558\uC138\uC694' }))
     }, 800)
   }, [])
 
   const selectCard = useCallback((card: HwatuCard) => {
+    if (inputLocked) return
     setState(prev => {
       if (prev.phase !== 'playerPickCard') return prev
       soundEngine.playClick()
@@ -127,7 +134,6 @@ export function useGoStopGame() {
       const newHand = prev.playerHand.filter(c => c.id !== card.id)
 
       if (matches.length === 0) {
-        // No match: card to field, go to flip
         soundEngine.playCardPlace()
         return {
           ...prev,
@@ -141,7 +147,6 @@ export function useGoStopGame() {
       }
 
       if (matches.length === 1) {
-        // Auto capture
         soundEngine.playCardPlace()
         return {
           ...prev,
@@ -154,7 +159,6 @@ export function useGoStopGame() {
       }
 
       if (matches.length >= 3) {
-        // 3 match = capture all (bomb)
         soundEngine.playCardPlace()
         return {
           ...prev,
@@ -176,9 +180,10 @@ export function useGoStopGame() {
         message: '\uAC00\uC838\uAC08 \uCE74\uB4DC\uB97C \uC120\uD0DD\uD558\uC138\uC694',
       }
     })
-  }, [])
+  }, [inputLocked])
 
   const selectMatch = useCallback((matchCard: HwatuCard) => {
+    if (inputLocked) return
     soundEngine.playCapture()
     setState(prev => {
       if (prev.phase !== 'playerPickMatch' || !prev.pendingMatch) return prev
@@ -189,27 +194,21 @@ export function useGoStopGame() {
         message: '\uB371 \uCE74\uB4DC \uB4A4\uC9D1\uAE30...',
       }
     })
-  }, [])
+  }, [inputLocked])
 
   const flipDeck = useCallback(() => {
+    if (inputLocked) return
     setState(prev => {
       if (prev.phase !== 'playerFlip') return prev
       if (prev.deck.length === 0) return prev
 
       soundEngine.playFlip()
+      lockInput(400)
       const [flipped, ...restDeck] = prev.deck
 
-      // Also check if flipped matches the card we placed (쪽)
-      let allFieldForFlip = [...prev.field]
-      if (prev.selectedCard && !prev.pendingMatch) {
-        // selectedCard was placed on field (no match found)
-        // field already contains it
-      }
-
-      const flipMatchCandidates = getFieldMatches(flipped, allFieldForFlip)
+      const flipMatchCandidates = getFieldMatches(flipped, [...prev.field])
 
       if (flipMatchCandidates.length === 2) {
-        // Player chooses
         return {
           ...prev,
           deck: restDeck,
@@ -221,24 +220,19 @@ export function useGoStopGame() {
 
       // Auto resolve
       const flipMatch = flipMatchCandidates.length === 1 ? flipMatchCandidates[0]
-        : flipMatchCandidates.length >= 3 ? flipMatchCandidates[0] // capture first (all will be handled)
+        : flipMatchCandidates.length >= 3 ? flipMatchCandidates[0]
         : null
 
       const playedCard = prev.selectedCard!
       const playedMatch = prev.pendingMatch?.matchCandidates[0] ?? null
 
-      // Handle 3-match bomb for flip
       let extraCaptures: HwatuCard[] = []
       if (flipMatchCandidates.length >= 3) {
         extraCaptures = flipMatchCandidates.slice(1)
       }
-      if (prev.pendingMatch && prev.pendingMatch.matchCandidates.length >= 3) {
-        // played card was a bomb too
-      }
 
       const changes = captureCards('player', { ...prev, deck: restDeck }, playedCard, playedMatch, flipped, flipMatch)
 
-      // Also handle extra captures for bombs
       let finalCapture = (changes as Record<string, unknown>).playerCapture as CapturedCards
       let finalField = changes.field as HwatuCard[]
       if (extraCaptures.length > 0) {
@@ -279,16 +273,16 @@ export function useGoStopGame() {
       }
     })
 
-    // If opponent turn, trigger AI after delay
     timerRef.current = setTimeout(() => {
       setState(prev => {
-        if (prev.phase === 'opponentTurn') return prev // will be handled by runOpponent
+        if (prev.phase === 'opponentTurn') return prev
         return prev
       })
     }, 100)
-  }, [])
+  }, [inputLocked])
 
   const selectFlipMatch = useCallback((matchCard: HwatuCard) => {
+    if (inputLocked) return
     soundEngine.playCapture()
     setState(prev => {
       if (prev.phase !== 'playerFlipMatch' || !prev.flippedCard) return prev
@@ -324,19 +318,22 @@ export function useGoStopGame() {
         message: nextPhase === 'goStop' ? `${newScore.total}\uC810! \uACE0 \uB610\uB294 \uC2A4\uD1B1?` : '',
       }
     })
-  }, [])
+  }, [inputLocked])
 
   const playerGo = useCallback(() => {
+    if (inputLocked) return
     soundEngine.playGo()
+    lockInput(300)
     setState(prev => ({
       ...prev,
       goCount: { ...prev.goCount, player: prev.goCount.player + 1 },
       phase: 'opponentTurn' as GamePhase,
       message: `\uACE0! (${prev.goCount.player + 1}\uACE0)`,
     }))
-  }, [])
+  }, [inputLocked])
 
   const playerStop = useCallback(() => {
+    if (inputLocked) return
     soundEngine.playStop()
     setState(prev => {
       const multiplier = Math.pow(2, prev.goCount.player)
@@ -348,7 +345,7 @@ export function useGoStopGame() {
         message: `\uC2A4\uD1B1! ${finalPoints}\uC810 \uD68D\uB4DD!`,
       }
     })
-  }, [])
+  }, [inputLocked])
 
   // ── Opponent Turn ──
 
@@ -363,7 +360,10 @@ export function useGoStopGame() {
       }
 
       soundEngine.playCardPlace()
-      const card = aiPickCard(prev.opponentHand, prev.field)
+      const card = aiPickCard(
+        prev.opponentHand, prev.field, difficulty,
+        prev.playerCapture, prev.opponentCapture, prev.deck,
+      )
       const matches = getFieldMatches(card, prev.field)
       const newHand = prev.opponentHand.filter(c => c.id !== card.id)
 
@@ -371,7 +371,7 @@ export function useGoStopGame() {
       if (matches.length === 1) {
         playedMatch = matches[0]
       } else if (matches.length >= 2) {
-        playedMatch = aiPickMatch(matches)
+        playedMatch = aiPickMatch(matches, difficulty)
       }
 
       // Flip from deck
@@ -391,7 +391,7 @@ export function useGoStopGame() {
         if (fMatches.length === 1) {
           flipMatch = fMatches[0]
         } else if (fMatches.length >= 2) {
-          flipMatch = aiPickMatch(fMatches)
+          flipMatch = aiPickMatch(fMatches, difficulty)
         }
       }
 
@@ -421,7 +421,7 @@ export function useGoStopGame() {
       let newTotalScore = prev.totalScore
 
       if (hasNewScore && (oppScore.total >= 1 || wasGo)) {
-        const shouldGo = aiShouldGo(oppScore.total, prev.goCount.opponent)
+        const shouldGo = aiShouldGo(oppScore.total, prev.goCount.opponent, difficulty, newHand.length)
         if (shouldGo) {
           newGoCount = { ...newGoCount, opponent: newGoCount.opponent + 1 }
           msg = `\uC0C1\uB300 \uACE0! (${newGoCount.opponent}\uACE0)`
@@ -459,9 +459,10 @@ export function useGoStopGame() {
         message: msg,
       }
     })
-  }, [])
+  }, [difficulty])
 
   const triggerOpponent = useCallback(() => {
+    lockInput(1200)
     timerRef.current = setTimeout(() => {
       runOpponentTurn()
     }, 1000)
@@ -473,6 +474,9 @@ export function useGoStopGame() {
 
   return {
     state,
+    difficulty,
+    setDifficulty,
+    inputLocked,
     startGame,
     selectCard,
     selectMatch,

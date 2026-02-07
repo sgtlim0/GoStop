@@ -10,10 +10,27 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 8px 12px;
+  padding: 6px 12px;
   flex-shrink: 0;
   position: relative;
   background: linear-gradient(180deg, rgba(26, 10, 10, 0.9), transparent);
+}
+
+.headerLeft {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.difficultyTag {
+  font-size: 0.6rem;
+  font-weight: 700;
+  background: rgba(240, 192, 64, 0.15);
+  color: var(--gold);
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 1px solid rgba(240, 192, 64, 0.2);
 }
 
 .logo {
@@ -79,20 +96,21 @@
 
 .controlBar {
   flex-shrink: 0;
-  padding: 6px 12px 12px;
+  padding: 8px 16px env(safe-area-inset-bottom, 12px);
   display: flex;
   justify-content: center;
 }
 
 .actionButton {
-  padding: 10px 32px;
+  padding: 14px 40px;
   border: none;
-  border-radius: 10px;
-  font-size: 0.85rem;
+  border-radius: 12px;
+  font-size: 0.95rem;
   font-weight: 700;
   cursor: pointer;
   transition: transform 0.1s ease;
   letter-spacing: 0.05em;
+  min-height: 48px;
 }
 
 .actionButton:active {
@@ -111,17 +129,20 @@
   border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
+/* ── Start Screen ── */
+
 .startScreen {
   flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 24px;
+  gap: 20px;
+  padding: 24px;
 }
 
 .startTitle {
-  font-size: 2rem;
+  font-size: 2.4rem;
   font-weight: 900;
   color: var(--gold);
   text-shadow: 0 2px 20px rgba(240, 192, 64, 0.3);
@@ -130,28 +151,103 @@
 .startSubtitle {
   font-size: 0.85rem;
   color: rgba(255, 255, 255, 0.4);
+  margin-bottom: 8px;
 }
 
 .startBtn {
-  padding: 14px 48px;
+  padding: 16px 56px;
   border: none;
-  border-radius: 12px;
+  border-radius: 14px;
   background: linear-gradient(145deg, #c23b22, #8b1a1a);
   color: white;
-  font-size: 1.1rem;
+  font-size: 1.15rem;
   font-weight: 800;
   letter-spacing: 0.1em;
   cursor: pointer;
   box-shadow: 0 4px 20px rgba(194, 59, 34, 0.4);
   transition: transform 0.1s ease;
+  min-height: 52px;
 }
 
 .startBtn:active {
   transform: scale(0.96);
 }
 
+/* ── Difficulty Selector ── */
+
+.difficultySection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  max-width: 340px;
+}
+
+.difficultyLabel {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.5);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.difficultyGrid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+  width: 100%;
+}
+
+.difficultyBtn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 10px 4px;
+  border: 1.5px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  min-height: 52px;
+}
+
+.difficultyBtn:active {
+  transform: scale(0.95);
+}
+
+.difficultyActive {
+  border-color: var(--gold);
+  background: rgba(240, 192, 64, 0.12);
+  box-shadow: 0 0 12px rgba(240, 192, 64, 0.15);
+}
+
+.difficultyName {
+  font-size: 0.6rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.difficultyActive .difficultyName {
+  color: var(--gold);
+}
+
+.difficultyStars {
+  font-size: 0.45rem;
+  color: rgba(255, 200, 100, 0.5);
+  letter-spacing: 1px;
+}
+
+.difficultyActive .difficultyStars {
+  color: var(--gold);
+}
+
 @media (min-width: 480px) {
   .header { padding: 10px 16px; }
   .logoText { font-size: 0.9rem; }
   .controlBar { padding: 8px 16px 16px; }
+  .difficultyGrid { gap: 8px; }
+  .difficultyBtn { padding: 12px 6px; }
+  .difficultyName { font-size: 0.65rem; }
 }

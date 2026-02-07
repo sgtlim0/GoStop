@@ -1,8 +1,10 @@
 .container {
   padding: 6px 8px;
+  padding-bottom: max(8px, env(safe-area-inset-bottom, 8px));
   display: flex;
   flex-direction: column;
   gap: 4px;
+  flex-shrink: 0;
 }
 
 .label {
@@ -20,6 +22,7 @@
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
   padding: 4px 0 8px;
+  justify-content: center;
 }
 
 .hand::-webkit-scrollbar { display: none; }
