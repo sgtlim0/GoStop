@@ -141,7 +141,7 @@
 }
 
 .faceDown .backPattern::after {
-  content: '\u82B1';
+  content: '\82B1';
   position: absolute;
   top: 50%;
   left: 50%;
