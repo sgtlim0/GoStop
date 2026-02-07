@@ -20,6 +20,7 @@ export interface HwatuCard {
   readonly junkValue: number
   readonly monthName: string
   readonly monthSymbol: string
+  readonly illustration: string
 }
 
 export interface CapturedCards {

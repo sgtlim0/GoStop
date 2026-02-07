@@ -1,7 +1,9 @@
+/* ── Card Shell ── */
+
 .card {
   width: var(--card-w);
   height: var(--card-h);
-  border-radius: 5px;
+  border-radius: 4px;
   flex-shrink: 0;
   position: relative;
   transition: transform 0.15s ease, box-shadow 0.2s ease;
@@ -30,100 +32,192 @@
   100% { opacity: 1; transform: translateY(0) scale(1); }
 }
 
+/* ── Card Face (Traditional Hwatu Style) ── */
+
 .face {
   width: 100%;
   height: 100%;
-  border-radius: 5px;
-  border: 1.5px solid rgba(255, 255, 255, 0.15);
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+  border: 2px solid #c23b22;
+  background:
+    linear-gradient(145deg, #f5ecd7 0%, #ede2c8 40%, #e8d9b8 100%);
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.3),
+    inset 0 0 0 1px rgba(194, 59, 34, 0.15);
   position: relative;
   overflow: hidden;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
 }
+
+/* Month-colored top accent bar */
+.face::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 30%;
+  background: var(--month-bg);
+  opacity: 0.18;
+  pointer-events: none;
+}
+
+/* ── Card Back (Red Hwatu Back) ── */
 
 .back {
   width: 100%;
   height: 100%;
-  border-radius: 5px;
-  border: 1.5px solid #c23b22;
-  background: linear-gradient(145deg, #8b1a1a, #5c1010);
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+  border: 2px solid #a83020;
+  background: linear-gradient(145deg, #c23b22, #8b1a1a);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 3px;
 }
 
-.backPattern {
-  width: 65%;
-  height: 75%;
-  border: 1.5px solid rgba(255, 200, 100, 0.3);
-  border-radius: 3px;
-  background: repeating-linear-gradient(
-    45deg,
-    transparent,
-    transparent 3px,
-    rgba(255, 200, 100, 0.06) 3px,
-    rgba(255, 200, 100, 0.06) 6px
-  );
+.backInner {
+  width: 100%;
+  height: 100%;
+  border: 1.5px solid rgba(255, 200, 100, 0.25);
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 3px,
+      rgba(255, 200, 100, 0.06) 3px,
+      rgba(255, 200, 100, 0.06) 6px
+    );
 }
 
-.monthNum {
+.backSymbol {
+  font-size: 0.7em;
+  opacity: 0.5;
+  filter: grayscale(0.3);
+}
+
+/* ── Month Badge (top-left) ── */
+
+.monthBadge {
   position: absolute;
-  top: 2px;
-  left: 3px;
-  font-size: 0.55rem;
-  font-weight: 800;
-  color: rgba(255, 255, 255, 0.9);
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  top: 1px;
+  left: 2px;
+  font-size: 0.5rem;
+  font-weight: 900;
+  color: #5a3a2a;
   line-height: 1;
+  z-index: 2;
+  text-shadow: 0 0 2px rgba(255, 255, 255, 0.6);
 }
+
+/* ── Type Badge (top-right) ── */
 
 .typeBadge {
   position: absolute;
-  top: 2px;
-  right: 2px;
-  width: 12px;
-  height: 12px;
+  top: 1px;
+  right: 1px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.45rem;
+  font-size: 0.35rem;
   line-height: 1;
+  color: #fff;
+  z-index: 2;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  text-shadow: 0 0 1px rgba(0, 0, 0, 0.5);
 }
 
-.ribbon {
+/* ── Main Illustration ── */
+
+.illustrationArea {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  min-height: 0;
+  z-index: 1;
+}
+
+.mainEmoji {
+  font-size: 1.2em;
+  line-height: 1;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
+}
+
+.brightStar {
   position: absolute;
-  bottom: 12px;
+  top: -2px;
+  right: -4px;
+  font-size: 0.5em;
+  animation: twinkle 1.5s ease infinite alternate;
+}
+
+@keyframes twinkle {
+  0% { opacity: 0.5; transform: scale(0.8); }
+  100% { opacity: 1; transform: scale(1.1); }
+}
+
+/* ── Ribbon Strip ── */
+
+.ribbonStrip {
+  position: absolute;
+  bottom: 14px;
   left: 50%;
   transform: translateX(-50%);
-  width: 70%;
-  height: 4px;
+  width: 80%;
+  padding: 1px 0;
   border-radius: 2px;
-  opacity: 0.9;
+  font-size: 0.35rem;
+  font-weight: 800;
+  text-align: center;
+  letter-spacing: 0.05em;
+  z-index: 2;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
 }
 
-.cardName {
-  font-size: 0.55rem;
+/* ── Card Label (bottom) ── */
+
+.cardLabel {
+  position: absolute;
+  bottom: 1px;
+  left: 0;
+  right: 0;
+  font-size: 0.4rem;
   font-weight: 700;
-  color: white;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+  color: #5a3a2a;
   text-align: center;
-  line-height: 1.1;
-  padding: 0 2px;
+  line-height: 1.2;
+  z-index: 2;
 }
+
+/* ── Bright Glow ── */
 
 .brightGlow {
   position: absolute;
   inset: 0;
-  border-radius: 5px;
-  background: radial-gradient(ellipse at 50% 30%, rgba(255, 220, 100, 0.25) 0%, transparent 60%);
+  border-radius: 4px;
+  background: radial-gradient(
+    ellipse at 50% 30%,
+    rgba(255, 215, 0, 0.2) 0%,
+    rgba(255, 200, 50, 0.08) 40%,
+    transparent 70%
+  );
   pointer-events: none;
+  z-index: 3;
 }
+
+/* ── Interactive States ── */
 
 .selected {
   transform: translateY(-6px);
@@ -140,19 +234,28 @@
   100% { box-shadow: 0 0 0 2px #4a9eff, 0 0 18px rgba(74, 158, 255, 0.6); }
 }
 
-.faceDown .backPattern::after {
-  content: '\82B1';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 0.8em;
-  color: rgba(255, 200, 100, 0.5);
+/* ── Responsive ── */
+
+@media (min-width: 400px) {
+  .monthBadge { font-size: 0.55rem; top: 2px; left: 3px; }
+  .typeBadge { width: 12px; height: 12px; font-size: 0.4rem; }
+  .mainEmoji { font-size: 1.4em; }
+  .ribbonStrip { font-size: 0.38rem; padding: 1.5px 0; bottom: 16px; }
+  .cardLabel { font-size: 0.45rem; bottom: 2px; }
+  .backSymbol { font-size: 0.8em; }
 }
 
 @media (min-width: 480px) {
-  .monthNum { font-size: 0.65rem; top: 3px; left: 4px; }
-  .typeBadge { width: 14px; height: 14px; font-size: 0.5rem; }
-  .cardName { font-size: 0.6rem; }
-  .ribbon { height: 5px; bottom: 14px; }
+  .monthBadge { font-size: 0.6rem; top: 3px; left: 4px; }
+  .typeBadge { width: 14px; height: 14px; font-size: 0.45rem; top: 2px; right: 2px; }
+  .mainEmoji { font-size: 1.6em; }
+  .ribbonStrip { font-size: 0.42rem; padding: 2px 0; bottom: 18px; }
+  .cardLabel { font-size: 0.5rem; bottom: 2px; }
+  .backSymbol { font-size: 1em; }
+}
+
+@media (min-width: 768px) {
+  .mainEmoji { font-size: 1.8em; }
+  .ribbonStrip { font-size: 0.48rem; padding: 2px 2px; }
+  .cardLabel { font-size: 0.55rem; }
 }
